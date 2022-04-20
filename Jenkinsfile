@@ -41,83 +41,83 @@ pipeline {
       }
     }
 
-    stage('action') {
-      when {
-        expression { params.ACTION == 'create-changeset' || params.ACTION == 'execute-changeset' || params.ACTION == 'deploy-stack' || params.ACTION == 'delete-stack'}
-      }
-      steps {
-        ansiColor('xterm') {
-          script {
-            if (!params.TOGGLE) {
-                currentBuild.result = 'ABORTED' //If you do not set the toggle flag to true before executing the build action, it will automatically abort the pipeline for any action.
-            } else {
-                if (params.ACTION == 'create-changeset') {
-                    env.CHANGESET_MODE = false
-                } else {
-                    env.CHANGESET_MODE = true
-                }
-            }
-          }
-        }
-      }
-    }
+    // stage('action') {
+    //   when {
+    //     expression { params.ACTION == 'create-changeset' || params.ACTION == 'execute-changeset' || params.ACTION == 'deploy-stack' || params.ACTION == 'delete-stack'}
+    //   }
+    //   steps {
+    //     ansiColor('xterm') {
+    //       script {
+    //         if (!params.TOGGLE) {
+    //             currentBuild.result = 'ABORTED' //If you do not set the toggle flag to true before executing the build action, it will automatically abort the pipeline for any action.
+    //         } else {
+    //             if (params.ACTION == 'create-changeset') {
+    //                 env.CHANGESET_MODE = false
+    //             } else {
+    //                 env.CHANGESET_MODE = true
+    //             }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
-    stage('stack-execution') {
-      when {
-        expression { params.ACTION == 'deploy-stack' || params.ACTION == 'execute-changeset' }
-      }
-      steps {
-        ansiColor('xterm') {
-          container("jenkins-agent") {
-            withCredentials([[
-              $class: 'AmazonWebServicesCredentialsBinding',
-              credentialsId: "${CFN_CREDENTIALS_ID}",
-              accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-              secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                sh 'scripts/deploy-stack.sh ${STACK_NAME} ${PARAMETERS_FILE_NAME} ${TEMPLATE_NAME} ${CHANGESET_MODE} ${REGION}'
-            }
-          }
-        }
-      }
-    }
+    // stage('stack-execution') {
+    //   when {
+    //     expression { params.ACTION == 'deploy-stack' || params.ACTION == 'execute-changeset' }
+    //   }
+    //   steps {
+    //     ansiColor('xterm') {
+    //       container("jenkins-agent") {
+    //         withCredentials([[
+    //           $class: 'AmazonWebServicesCredentialsBinding',
+    //           credentialsId: "${CFN_CREDENTIALS_ID}",
+    //           accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+    //           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+    //             sh 'scripts/deploy-stack.sh ${STACK_NAME} ${PARAMETERS_FILE_NAME} ${TEMPLATE_NAME} ${CHANGESET_MODE} ${REGION}'
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
-    stage('create-changeset') {
-      when {
-        expression { params.ACTION == 'create-changeset' }
-      }
-      steps {
-        ansiColor('xterm') {
-          container("jenkins-agent") {
-            withCredentials([[
-              $class: 'AmazonWebServicesCredentialsBinding',
-              credentialsId: "${CFN_CREDENTIALS_ID}",
-              accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-              secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                sh 'scripts/deploy-stack.sh ${STACK_NAME} ${PARAMETERS_FILE_NAME} ${TEMPLATE_NAME} ${CHANGESET_MODE} ${REGION}'
-            }
-          }
-        }
-      }
-    }
+    // stage('create-changeset') {
+    //   when {
+    //     expression { params.ACTION == 'create-changeset' }
+    //   }
+    //   steps {
+    //     ansiColor('xterm') {
+    //       container("jenkins-agent") {
+    //         withCredentials([[
+    //           $class: 'AmazonWebServicesCredentialsBinding',
+    //           credentialsId: "${CFN_CREDENTIALS_ID}",
+    //           accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+    //           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+    //             sh 'scripts/deploy-stack.sh ${STACK_NAME} ${PARAMETERS_FILE_NAME} ${TEMPLATE_NAME} ${CHANGESET_MODE} ${REGION}'
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
-    stage('delete-stack') {
-      when {
-        expression { params.ACTION == 'delete-stack' }
-      }
-      steps {
-        ansiColor('xterm') {
-          container("jenkins-agent") {
-            withCredentials([[
-              $class: 'AmazonWebServicesCredentialsBinding',
-              credentialsId: "${CFN_CREDENTIALS_ID}",
-              accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-              secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                sh 'scripts/delete-stack.sh ${STACK_NAME} ${REGION}'
-            }
-          }
-        }
-      }
-    }
+    // stage('delete-stack') {
+    //   when {
+    //     expression { params.ACTION == 'delete-stack' }
+    //   }
+    //   steps {
+    //     ansiColor('xterm') {
+    //       container("jenkins-agent") {
+    //         withCredentials([[
+    //           $class: 'AmazonWebServicesCredentialsBinding',
+    //           credentialsId: "${CFN_CREDENTIALS_ID}",
+    //           accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+    //           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+    //             sh 'scripts/delete-stack.sh ${STACK_NAME} ${REGION}'
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
   }
 }
