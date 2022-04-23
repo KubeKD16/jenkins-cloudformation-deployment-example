@@ -1,0 +1,132 @@
+kubectl describe pod/efs-csi-controller-7cc75b6c44-bbtnf -n kube-system
+Name:                 efs-csi-controller-7cc75b6c44-bbtnf
+Namespace:            kube-system
+Priority:             2000000000
+Priority Class Name:  system-cluster-critical
+Node:                 ip-10-190-243-216.ec2.internal/10.190.243.216
+Start Time:           Fri, 22 Apr 2022 10:52:29 -0400
+Labels:               app=efs-csi-controller
+                      app.kubernetes.io/instance=kustomize
+                      app.kubernetes.io/name=aws-efs-csi-driver
+                      pod-template-hash=7cc75b6c44
+Annotations:          kubernetes.io/psp: eks.privileged
+Status:               Running
+IP:                   10.190.243.216
+IPs:
+  IP:           10.190.243.216
+Controlled By:  ReplicaSet/efs-csi-controller-7cc75b6c44
+Containers:
+  efs-plugin:
+    Container ID:  docker://30dbe645a6fc7e61f464767d042f759176efe4e72d439b41b86e8c9c8322971b
+    Image:         amazon/aws-efs-csi-driver:master
+    Image ID:      docker-pullable://amazon/aws-efs-csi-driver@sha256:c39c59415c448c889533098f09bfb839297c22d3fce691c5568695e9e3276611
+    Port:          9909/TCP
+    Host Port:     9909/TCP
+    Args:
+      --endpoint=$(CSI_ENDPOINT)
+      --logtostderr
+      --v=2
+      --delete-access-point-root-dir=false
+      --vol-metrics-opt-in=false
+    State:          Running
+      Started:      Fri, 22 Apr 2022 10:52:49 -0400
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:healthz/healthz delay=10s timeout=3s period=10s #success=1 #failure=5
+    Environment:
+      CSI_ENDPOINT:                 unix:///var/lib/csi/sockets/pluginproxy/csi.sock
+      AWS_DEFAULT_REGION:           us-east-1
+      AWS_REGION:                   us-east-1
+      AWS_ROLE_ARN:                 arn:aws:iam::914401603085:role/AmazonEKS_EFS_CSI_DriverRole
+      AWS_WEB_IDENTITY_TOKEN_FILE:  /var/run/secrets/eks.amazonaws.com/serviceaccount/token
+    Mounts:
+      /var/lib/csi/sockets/pluginproxy/ from socket-dir (rw)
+      /var/run/secrets/eks.amazonaws.com/serviceaccount from aws-iam-token (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-8llrx (ro)
+  csi-provisioner:
+    Container ID:  docker://2ae4ef4a76e51418e14a1e7e2257eca65c40f5eb0fb9535c3334c8df42e9ca0f
+    Image:         public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner:v2.1.1-eks-1-18-13
+    Image ID:      docker-pullable://public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner@sha256:05d38de298e419cf94a30af0ea87285d2bc35b40bbacce55636ba04b794b08e1
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      --csi-address=$(ADDRESS)
+      --v=2
+      --feature-gates=Topology=true
+      --extra-create-metadata
+      --leader-election
+    State:          Running
+      Started:      Fri, 22 Apr 2022 10:52:49 -0400
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      ADDRESS:                      /var/lib/csi/sockets/pluginproxy/csi.sock
+      AWS_DEFAULT_REGION:           us-east-1
+      AWS_REGION:                   us-east-1
+      AWS_ROLE_ARN:                 arn:aws:iam::914401603085:role/AmazonEKS_EFS_CSI_DriverRole
+      AWS_WEB_IDENTITY_TOKEN_FILE:  /var/run/secrets/eks.amazonaws.com/serviceaccount/token
+    Mounts:
+      /var/lib/csi/sockets/pluginproxy/ from socket-dir (rw)
+      /var/run/secrets/eks.amazonaws.com/serviceaccount from aws-iam-token (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-8llrx (ro)
+  liveness-probe:
+    Container ID:  docker://cbc94d4c200cfc80fcf53ed53877c88cbd418b565ef6e7cc2afa70741477ba11
+    Image:         public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe:v2.2.0-eks-1-18-13
+    Image ID:      docker-pullable://public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe@sha256:e4c28f969b57275e32ecf9f0860c069fb946dacceb11534c11a22e3739608f8b
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      --csi-address=/csi/csi.sock
+      --health-port=9909
+    State:          Running
+      Started:      Fri, 22 Apr 2022 10:52:49 -0400
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      AWS_DEFAULT_REGION:           us-east-1
+      AWS_REGION:                   us-east-1
+      AWS_ROLE_ARN:                 arn:aws:iam::914401603085:role/AmazonEKS_EFS_CSI_DriverRole
+      AWS_WEB_IDENTITY_TOKEN_FILE:  /var/run/secrets/eks.amazonaws.com/serviceaccount/token
+    Mounts:
+      /csi from socket-dir (rw)
+      /var/run/secrets/eks.amazonaws.com/serviceaccount from aws-iam-token (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-8llrx (ro)
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  aws-iam-token:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  86400
+  socket-dir:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  kube-api-access-8llrx:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age                From               Message
+  ----     ------            ----               ----               -------
+  Warning  FailedScheduling  24m (x2 over 24m)  default-scheduler  0/2 nodes are available: 2 node(s) didn't have free ports for the requested pod ports.
+  Normal   Scheduled         24m                default-scheduler  Successfully assigned kube-system/efs-csi-controller-7cc75b6c44-bbtnf to ip-10-190-243-216.ec2.internal
+  Normal   Pulling           24m                kubelet            Pulling image "amazon/aws-efs-csi-driver:master"
+  Normal   Pulled            23m                kubelet            Successfully pulled image "amazon/aws-efs-csi-driver:master" in 18.964519244s
+  Normal   Created           23m                kubelet            Created container efs-plugin
+  Normal   Started           23m                kubelet            Started container efs-plugin
+  Normal   Pulled            23m                kubelet            Container image "public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner:v2.1.1-eks-1-18-13" already present on machine
+  Normal   Created           23m                kubelet            Created container csi-provisioner
+  Normal   Started           23m                kubelet            Started container csi-provisioner
+  Normal   Pulled            23m                kubelet            Container image "public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe:v2.2.0-eks-1-18-13" already present on machine
+  Normal   Created           23m                kubelet            Created container liveness-probe
+  Normal   Started           23m                kubelet            Started container liveness-probe

@@ -16,6 +16,9 @@ spec:
     command:
     - cat
     tty: true
+    volumeMounts:
+      - name: persistent-storage
+        mountPath: /var/jenkins_home
     resources:
       requests:
         cpu: 100m
@@ -23,3 +26,7 @@ spec:
       limits:
         cpu: "1"
         memory: 1024Mi
+  volumes:
+    - name: persistent-storage
+      persistentVolumeClaim:
+        claimName: efs-claim-jenkins
