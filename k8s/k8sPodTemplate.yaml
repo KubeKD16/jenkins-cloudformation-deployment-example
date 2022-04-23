@@ -13,8 +13,8 @@ spec:
   containers:
   - name: jenkins-agent
     image: 914401603085.dkr.ecr.us-east-1.amazonaws.com/test-jenkins-agent:latest # Enter the jenkins inbound agent image.
-    command:
-    - cat
+    # command:
+    # - cat
     tty: true
     volumeMounts:
       - name: persistent-storage

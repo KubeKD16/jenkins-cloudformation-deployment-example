@@ -36,6 +36,7 @@ pipeline {
           container("jenkins-agent") {
             sh 'aws --version'
             sh 'aws sts get-caller-identity'
+            sh 'aws s3 ls --region us-east-1'
           }
         }
       }
