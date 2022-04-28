@@ -34,4 +34,4 @@ docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMG_TAG
 
 # # Push Image
 docker push $REPOSITORY_URI:latest
-# docker push $REPOSITORY_URI:$IMG_TAG
+docker push $REPOSITORY_URI:$IMG_TAG
