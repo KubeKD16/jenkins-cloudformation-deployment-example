@@ -37,7 +37,7 @@ pipeline {
             sh 'aws --version'
 //             sh 'echo "This is awesome"'
             sh 'aws sts get-caller-identity'
-            sh 'aws s3 ls --region us-east-1' 
+//             sh 'aws s3 ls --region us-east-1' 
             sh 'aws efs describe-file-systems --query "FileSystems[*].FileSystemId"'
           }
         }
