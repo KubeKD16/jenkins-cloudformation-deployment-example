@@ -1,4 +1,5 @@
 # Pull base image.
+FROM openjdk:11
 FROM jenkins/inbound-agent:latest
 
 USER root
